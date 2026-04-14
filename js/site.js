@@ -120,7 +120,7 @@
     ">Speakers</a>" +
     '<a role="menuitem" class="nav-dropdown__cta" href="' +
     L.apply +
-    '?event=bentonville">Apply — Bentonville</a>' +
+    '?event=bentonville">Apply for All-Paid Access</a>' +
     "</div></div>";
 
   var dropdownWc =
@@ -149,7 +149,7 @@
     ">Speakers</a>" +
     '<a role="menuitem" class="nav-dropdown__cta" href="' +
     L.apply +
-    '?event=west-coast">Apply — West Coast</a>' +
+    '?event=west-coast">Apply for All-Paid Access</a>' +
     "</div></div>";
 
   var header =
@@ -180,7 +180,7 @@
     applyHref +
     '"' +
     aria("apply") +
-    ">Apply to attend</a>" +
+    ">Apply for All-Paid Access</a>" +
     "</nav></div></header>";
 
   function eventSubnav() {
@@ -221,7 +221,7 @@
       '<a class="event-subnav__apply" href="' +
       L.apply +
       q +
-      '">Request invitation</a>' +
+      '">Apply for All-Paid Access</a>' +
       "</div></div></nav>"
     );
   }
@@ -232,7 +232,7 @@
     "<div><h3>Discover series</h3><p>Private, application-only conferences for senior security and technology leaders—curated sessions on AI, cloud, and cybersecurity with strategic partners.</p></div>" +
     "<div><h3>Apply</h3><p>Attendance is by approval only. There is no registration fee for invited guests; qualifying executives may receive travel, lodging, and full hospitality.</p><p><a href=\"" +
     applyHref +
-    '">Apply for consideration →</a></p></div>' +
+    '">Apply for All-Paid Access →</a></p></div>' +
     "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore@datalinknetworks.net\">learnmore@datalinknetworks.net</a></p><p><a href=\"" +
     L.upcoming +
     '">Upcoming conferences</a><br><a href="' +
@@ -266,6 +266,15 @@
     });
   }
 
+  function syncStickyOffsets() {
+    var main = document.querySelector(".site-sticky-head .site-header");
+    var sub = document.querySelector(".site-sticky-head .event-subnav");
+    var mh = main ? main.offsetHeight : 52;
+    var sh = sub ? sub.offsetHeight : 0;
+    document.documentElement.style.setProperty("--site-header-h", mh + "px");
+    document.documentElement.style.setProperty("--event-subnav-h", sh + "px");
+  }
+
   function inject() {
     var h = document.getElementById("site-header");
     var f = document.getElementById("site-footer");
@@ -281,9 +290,13 @@
       toggle.addEventListener("click", function () {
         var open = nav.classList.toggle("is-open");
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        requestAnimationFrame(syncStickyOffsets);
       });
     }
     wireDropdowns();
+    syncStickyOffsets();
+    window.addEventListener("resize", syncStickyOffsets);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStickyOffsets);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", inject);

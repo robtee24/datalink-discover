@@ -53,7 +53,7 @@ a:hover {
   margin-inline: auto;
 }
 
-/* Header */
+/* Header (sticky when inside .site-sticky-head; fallback for bare header) */
 .site-header {
   position: sticky;
   top: 0;
@@ -560,11 +560,15 @@ h2 {
   margin-top: 0;
 }
 
-/* Session / speaker detail */
+/* Session / speaker detail — sticks below main nav (+ event subnav when present) */
 .page-hero {
+  position: sticky;
+  top: calc(var(--site-header-h, 52px) + var(--event-subnav-h, 0px));
+  z-index: 150;
   padding: 2.5rem 0;
-  background: linear-gradient(180deg, var(--navy-mid), var(--navy));
+  background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 55%, var(--navy) 100%);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 .page-hero h1 {
   font-family: var(--font-display);
@@ -718,20 +722,17 @@ h2 {
   max-width: 65ch;
 }
 
-/* Sticky site chrome (header + event subnav) */
+/* Site chrome: main nav and event subnav each sticky (stacked) */
 .site-sticky-head {
+  display: block;
+}
+.site-sticky-head .site-header {
   position: sticky;
   top: 0;
-  z-index: 200;
+  z-index: 210;
   background: rgba(11, 20, 38, 0.97);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
-}
-.site-sticky-head .site-header {
-  position: relative;
-  background: transparent;
-  border-bottom: none;
-  backdrop-filter: none;
 }
 
 /* Mega-style dropdowns */
@@ -812,8 +813,13 @@ h2 {
 
 /* Event sub-navigation */
 .event-subnav {
+  position: sticky;
+  top: var(--site-header-h, 52px);
+  z-index: 205;
   border-top: 1px solid var(--border);
-  background: rgba(10, 15, 26, 0.85);
+  background: rgba(10, 15, 26, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
 .event-subnav__inner {
   display: flex;
@@ -873,9 +879,13 @@ h2 {
 
 /* Event hub hero */
 .event-hero {
+  position: sticky;
+  top: calc(var(--site-header-h, 52px) + var(--event-subnav-h, 0px));
+  z-index: 140;
   padding: 2.75rem 0 3.25rem;
   background: linear-gradient(165deg, #152a4a 0%, var(--navy) 50%, #0a0f1a 100%);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 .event-hero h1 {
   font-family: var(--font-display);
