@@ -1021,3 +1021,37 @@ h2 {
 .btn-block {
   width: 100%;
 }
+
+.apply-benefit-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+}
+.apply-tier {
+  background: var(--navy-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+}
+.apply-tier--secondary {
+  border-color: rgba(148, 163, 184, 0.28);
+  background: rgba(26, 45, 77, 0.45);
+}
+.apply-tier__title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.apply-tier__text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.apply-tier__text strong {
+  color: var(--text);
+}

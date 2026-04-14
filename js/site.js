@@ -120,7 +120,7 @@
     ">Speakers</a>" +
     '<a role="menuitem" class="nav-dropdown__cta" href="' +
     L.apply +
-    '?event=bentonville">Apply for All-Paid Access</a>' +
+    '?event=bentonville">Apply for All Expenses Paid Access</a>' +
     "</div></div>";
 
   var dropdownWc =
@@ -149,7 +149,7 @@
     ">Speakers</a>" +
     '<a role="menuitem" class="nav-dropdown__cta" href="' +
     L.apply +
-    '?event=west-coast">Apply for All-Paid Access</a>' +
+    '?event=west-coast">Apply for All Expenses Paid Access</a>' +
     "</div></div>";
 
   var header =
@@ -180,7 +180,7 @@
     applyHref +
     '"' +
     aria("apply") +
-    ">Apply for All-Paid Access</a>" +
+    ">Apply for All Expenses Paid Access</a>" +
     "</nav></div></header>";
 
   function eventSubnav() {
@@ -221,7 +221,7 @@
       '<a class="event-subnav__apply" href="' +
       L.apply +
       q +
-      '">Apply for All-Paid Access</a>' +
+      '">Apply for All Expenses Paid Access</a>' +
       "</div></div></nav>"
     );
   }
@@ -230,9 +230,9 @@
     '<footer class="site-footer">' +
     '<div class="wrap site-footer__grid">' +
     "<div><h3>Discover series</h3><p>Private, application-only conferences for senior security and technology leaders—curated sessions on AI, cloud, and cybersecurity with strategic partners.</p></div>" +
-    "<div><h3>Apply</h3><p>Attendance is by approval only. There is no registration fee for invited guests; qualifying executives may receive travel, lodging, and full hospitality.</p><p><a href=\"" +
+    "<div><h3>Apply</h3><p>By approval only. Qualifying leaders may receive all expenses paid (travel, lodging, meals, and conference costs). Other approved guests receive complimentary conference access.</p><p><a href=\"" +
     applyHref +
-    '">Apply for All-Paid Access →</a></p></div>' +
+    '">Apply for All Expenses Paid Access →</a></p></div>' +
     "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore@datalinknetworks.net\">learnmore@datalinknetworks.net</a></p><p><a href=\"" +
     L.upcoming +
     '">Upcoming conferences</a><br><a href="' +
