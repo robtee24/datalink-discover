@@ -796,10 +796,12 @@ h2 {
 .event-ledger-strip figcaption {
   font-size: 0.8rem;
   color: var(--text-muted);
-  padding: 0.65rem min(1120px, 92vw);
+  padding: 0.75rem clamp(1rem, 4vw, 1.75rem);
   margin: 0 auto;
   max-width: 1120px;
-  line-height: 1.45;
+  width: min(1120px, 92vw);
+  box-sizing: border-box;
+  line-height: 1.55;
 }
 
 .speaker-teaser-grid {
