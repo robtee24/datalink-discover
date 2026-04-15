@@ -188,7 +188,6 @@
     var er = L.eventRoot;
     var isBv = L.section === "bentonville";
     var label = isBv ? "Bentonville · June 17–19, 2026" : "West Coast · September 9–11, 2026";
-    var q = isBv ? "?event=bentonville" : "?event=west-coast";
     return (
       '<nav class="event-subnav" aria-label="' +
       (isBv ? "Bentonville Discover navigation" : "West Coast Discover navigation") +
@@ -218,10 +217,6 @@
       'speakers/index.html"' +
       aria(isBv ? "bv-speakers" : "wc-speakers") +
       ">Speakers</a>" +
-      '<a class="event-subnav__apply" href="' +
-      L.apply +
-      q +
-      '">Apply for All Expenses Paid Access</a>' +
       "</div></div></nav>"
     );
   }
@@ -266,13 +261,10 @@
     });
   }
 
-  function syncStickyOffsets() {
-    var main = document.querySelector(".site-sticky-head .site-header");
-    var sub = document.querySelector(".site-sticky-head .event-subnav");
-    var mh = main ? main.offsetHeight : 52;
-    var sh = sub ? sub.offsetHeight : 0;
-    document.documentElement.style.setProperty("--site-header-h", mh + "px");
-    document.documentElement.style.setProperty("--event-subnav-h", sh + "px");
+  function syncChromeHeight() {
+    var shell = document.querySelector(".site-sticky-head");
+    var px = shell ? shell.offsetHeight : 88;
+    document.documentElement.style.setProperty("--site-chrome-h", px + "px");
   }
 
   function inject() {
@@ -290,13 +282,16 @@
       toggle.addEventListener("click", function () {
         var open = nav.classList.toggle("is-open");
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
-        requestAnimationFrame(syncStickyOffsets);
+        requestAnimationFrame(function () {
+          requestAnimationFrame(syncChromeHeight);
+        });
       });
     }
     wireDropdowns();
-    syncStickyOffsets();
-    window.addEventListener("resize", syncStickyOffsets);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStickyOffsets);
+    syncChromeHeight();
+    requestAnimationFrame(syncChromeHeight);
+    window.addEventListener("resize", syncChromeHeight);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncChromeHeight);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", inject);
