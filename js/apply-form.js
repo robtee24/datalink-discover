@@ -1,14 +1,23 @@
 (function () {
   /**
-   * HubSpot Forms API (v3 integration submit).
-   * Endpoint: POST https://api.hsforms.com/submissions/v3/integration/submit/{portalId}/{formGuid}
-   * Uses your portal ID and the form’s GUID (from HubSpot → Marketing → Forms → embed / form details).
-   * No private API key is sent from the browser; this public endpoint is how embedded HubSpot forms work.
+   * HubSpot Forms API — unauthenticated submit (same as embedded forms).
+   * POST {HUBSPOT_FORMS_HOST}/submissions/v3/integration/submit/{portalId}/{formGuid}
    *
-   * In HubSpot, create a form (or edit the linked form) with internal field names matching the payload:
-   * firstname, lastname, company, jobtitle, email, phone, plus a single-line text property discover_event
-   * for “which event(s)” (semicolon-separated labels).
+   * SETUP (required or you get “form … can’t be found”):
+   * 1. HubSpot → Marketing → Lead capture → Forms → open the Discover apply form.
+   * 2. Click “Share” / “Embed” and find hbspt.forms.create({ portalId: "…", formId: "…" }) (formId is the form GUID).
+   * 3. Paste those exact strings into HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID below.
+   *    Do NOT use a Private App key, workflow ID, or “API key” — only the formId from the embed snippet.
+   * 4. If your account uses EU data hosting, set HUBSPOT_FORMS_HOST to https://api-eu1.hsforms.com
+   *    (see HubSpot community / docs for regional forms endpoints).
+   *
+   * Form fields in HubSpot must use these internal names: firstname, lastname, company, jobtitle, email, phone,
+   * plus single-line text discover_event (selected events, semicolon-separated).
    */
+  var HUBSPOT_FORMS_HOST = "https://api.hsforms.com";
+  // var HUBSPOT_FORMS_HOST = "https://api-eu1.hsforms.com"; // uncomment if your portal is EU-hosted
+
+  /** Replace with portalId + formId from the form’s Share → embed snippet (must be the same form). */
   var HUBSPOT_PORTAL_ID = "486200";
   var HUBSPOT_FORM_GUID = "8c9b18cc-546f-4a65-81aa-2ba8a8512e4f";
 
@@ -129,8 +138,10 @@
       return;
     }
 
+    var formsBase = (HUBSPOT_FORMS_HOST || "https://api.hsforms.com").replace(/\/+$/, "");
     var url =
-      "https://api.hsforms.com/submissions/v3/integration/submit/" +
+      formsBase +
+      "/submissions/v3/integration/submit/" +
       encodeURIComponent(HUBSPOT_PORTAL_ID) +
       "/" +
       encodeURIComponent(HUBSPOT_FORM_GUID);
@@ -187,7 +198,23 @@
           console.error("HubSpot form submit:", err && err.message, err && err.hubspotBody);
         }
         var detail = err && err.message ? String(err.message) : "";
-        if (detail && detail.length < 220) {
+        var dlow = detail.replace(/\u2019/g, "'").toLowerCase();
+        var notFound =
+          detail &&
+          (dlow.indexOf("can't be found") !== -1 ||
+            dlow.indexOf("cannot be found") !== -1 ||
+            dlow.indexOf("not be found") !== -1 ||
+            dlow.indexOf("form_not_found") !== -1 ||
+            dlow.indexOf("invalid form") !== -1);
+        if (notFound) {
+          showStatus(
+            "HubSpot does not recognize this portal + form ID. In HubSpot: Marketing → Lead capture → Forms → your apply form → Share → embed, and copy portalId and formId into HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID in js/apply-form.js (they must come from the same snippet). EU-hosted portals: set HUBSPOT_FORMS_HOST to https://api-eu1.hsforms.com . HubSpot message: " +
+              detail,
+            true
+          );
+          return;
+        }
+        if (detail && detail.length < 280) {
           showStatus(
             "We could not submit the form: " + detail + " If this persists, email learnmore@datalinknetworks.net or call (877) 487-3783.",
             true

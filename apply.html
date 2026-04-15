@@ -59,8 +59,8 @@
           <li><strong>Clear next steps</strong> — you will hear from us with approval details or an honest no / waitlist.</li>
         </ul>
         <p class="apply-note text-muted">
-          Submissions are sent to HubSpot via the Forms API (see <code>js/apply-form.js</code> for portal and form GUID). If a field name in HubSpot does not match the payload, you will see an error message—align the form’s internal names with
-          <code>firstname</code>, <code>lastname</code>, <code>company</code>, <code>jobtitle</code>, <code>email</code>, <code>phone</code>, and <code>discover_event</code>. Questions?
+          Submissions use HubSpot’s public Forms submit URL (see <code>js/apply-form.js</code>). The <strong>portal ID</strong> and <strong>form ID</strong> must match the same form: in HubSpot open <strong>Marketing → Lead capture → Forms</strong>, choose the apply form, click <strong>Share</strong>, and copy <code>portalId</code> and <code>formId</code> from the embed code into that file. If HubSpot says the form was not found, those values are wrong or your account needs the EU endpoint (<code>HUBSPOT_FORMS_HOST</code> in the script). Field internal names:
+          <code>firstname</code>, <code>lastname</code>, <code>company</code>, <code>jobtitle</code>, <code>email</code>, <code>phone</code>, <code>discover_event</code>.
           <a href="mailto:learnmore@datalinknetworks.net">learnmore@datalinknetworks.net</a>.
         </p>
       </div>
