@@ -92,7 +92,7 @@
   }
 
   var logoSrc =
-    "https://www.datalinknetworks.net/hs-fs/hubfs/New%20Logo%20Text%20White.png?width=220&name=New%20Logo%20Text%20White.png";
+    "https://www.datalinknetworks.com/hs-fs/hubfs/New%20Logo%20Text%20White.png?width=220&name=New%20Logo%20Text%20White.png";
 
   var dropdownBv =
     '<div class="nav-dropdown">' +
@@ -228,11 +228,11 @@
     "<div><h3>Apply</h3><p>By approval only. Qualifying leaders may receive all expenses paid (travel, lodging, meals, and conference costs). Other approved guests receive complimentary conference access.</p><p><a href=\"" +
     applyHref +
     '">Apply for All Expenses Paid Access →</a></p></div>' +
-    "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore@datalinknetworks.net\">learnmore@datalinknetworks.net</a></p><p><a href=\"" +
+    "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore.com\">learnmore.com</a></p><p><a href=\"" +
     L.upcoming +
     '">Upcoming conferences</a><br><a href="' +
     L.root +
-    'index.html">Series home</a><br><a href="https://www.datalinknetworks.net" target="_blank" rel="noopener">Datalink Networks</a></p></div>' +
+    'index.html">Series home</a><br><a href="https://www.datalinknetworks.com" target="_blank" rel="noopener">Datalink Networks</a></p></div>' +
     '</div><div class="wrap site-footer__legal">Invitation-only events. Benefits confirmed upon selection. © Datalink Networks.</div></footer>';
 
   function wireDropdowns() {

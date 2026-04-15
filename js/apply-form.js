@@ -216,11 +216,11 @@
         }
         if (detail && detail.length < 280) {
           showStatus(
-            "We could not submit the form: " + detail + " If this persists, email learnmore@datalinknetworks.net or call (877) 487-3783.",
+            "We could not submit the form: " + detail + " If this persists, email learnmore.com or call (877) 487-3783.",
             true
           );
         } else {
-          showStatus("Something went wrong. Please email learnmore@datalinknetworks.net or call (877) 487-3783.", true);
+          showStatus("Something went wrong. Please email learnmore.com or call (877) 487-3783.", true);
         }
       });
   });
