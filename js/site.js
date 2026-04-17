@@ -125,7 +125,7 @@
 
   var dropdownWc =
     '<div class="nav-dropdown">' +
-    '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-wc">Mandalay Beach</button>' +
+    '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-wc">West Coast</button>' +
     '<div id="nav-dd-wc" class="nav-dropdown__panel" role="menu">' +
     '<a role="menuitem" href="' +
     L.wc +
@@ -187,12 +187,10 @@
     if (L.section !== "bentonville" && L.section !== "west-coast") return "";
     var er = L.eventRoot;
     var isBv = L.section === "bentonville";
-    var label = isBv
-      ? "Bentonville · June 17–19, 2026"
-      : '<span class="event-subnav__badge--stack"><span class="event-subnav__badge-line">Mandalay Beach: September 29 – October 2, 2026</span><span class="event-subnav__badge-line event-subnav__badge-line--muted">Oxnard, CA / Zachari Dunes on Mandalay Beach</span></span>';
+    var label = isBv ? "Bentonville · June 17–19, 2026" : "West Coast · September 9–11, 2026";
     return (
       '<nav class="event-subnav" aria-label="' +
-      (isBv ? "Bentonville Discover navigation" : "Mandalay Beach Discover navigation") +
+      (isBv ? "Bentonville Discover navigation" : "West Coast Discover navigation") +
       '">' +
       '<div class="wrap event-subnav__inner">' +
       '<span class="event-subnav__badge">' +
