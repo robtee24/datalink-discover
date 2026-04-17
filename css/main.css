@@ -664,6 +664,14 @@ h2 {
   height: auto;
   display: block;
 }
+.venue-figure figcaption {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.65rem 0.85rem;
+  background: var(--navy-light);
+  border-top: 1px solid var(--border);
+  line-height: 1.45;
+}
 
 .event-stats {
   display: grid;

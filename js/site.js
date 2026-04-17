@@ -91,8 +91,7 @@
     return current === id ? ' aria-current="page"' : "";
   }
 
-  var logoSrc =
-    "https://www.datalinknetworks.com/hs-fs/hubfs/New%20Logo%20Text%20White.png?width=220&name=New%20Logo%20Text%20White.png";
+  var logoSrc = L.root + "img/datalink-logo-text-white.png";
 
   var dropdownBv =
     '<div class="nav-dropdown">' +
@@ -125,7 +124,7 @@
 
   var dropdownWc =
     '<div class="nav-dropdown">' +
-    '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-wc">West Coast</button>' +
+    '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-wc">Mandalay Beach</button>' +
     '<div id="nav-dd-wc" class="nav-dropdown__panel" role="menu">' +
     '<a role="menuitem" href="' +
     L.wc +
@@ -187,10 +186,12 @@
     if (L.section !== "bentonville" && L.section !== "west-coast") return "";
     var er = L.eventRoot;
     var isBv = L.section === "bentonville";
-    var label = isBv ? "Bentonville · June 17–19, 2026" : "West Coast · September 9–11, 2026";
+    var label = isBv
+      ? "Bentonville · June 17–19, 2026"
+      : "Mandalay Beach · September 29–October 2, 2026 · Oxnard, CA";
     return (
       '<nav class="event-subnav" aria-label="' +
-      (isBv ? "Bentonville Discover navigation" : "West Coast Discover navigation") +
+      (isBv ? "Bentonville Discover navigation" : "Mandalay Beach Discover navigation") +
       '">' +
       '<div class="wrap event-subnav__inner">' +
       '<span class="event-subnav__badge">' +
@@ -228,7 +229,7 @@
     "<div><h3>Apply</h3><p>By approval only. Qualifying leaders may receive all expenses paid (travel, lodging, meals, and conference costs). Other approved guests receive complimentary conference access.</p><p><a href=\"" +
     applyHref +
     '">Apply for All Expenses Paid Access →</a></p></div>' +
-    "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore.com\">learnmore.com</a></p><p><a href=\"" +
+    "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore@datalinknetworks.com\">learnmore@datalinknetworks.com</a></p><p><a href=\"" +
     L.upcoming +
     '">Upcoming conferences</a><br><a href="' +
     L.root +
