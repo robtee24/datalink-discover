@@ -4,8 +4,8 @@
   function computeLayout() {
     var L = {
       root: "",
-      apply: "apply.html",
-      upcoming: "upcoming-conferences.html",
+      apply: "apply",
+      upcoming: "upcoming-conferences",
       css: "css/main.css",
       bv: "bentonville/",
       wc: "west-coast/",
@@ -14,40 +14,40 @@
     };
     if (path.indexOf("/bentonville/sessions/") !== -1 || path.indexOf("/bentonville/speakers/") !== -1) {
       L.root = "../../";
-      L.apply = "../../apply.html";
-      L.upcoming = "../../upcoming-conferences.html";
+      L.apply = "../../apply";
+      L.upcoming = "../../upcoming-conferences";
       L.bv = "../";
       L.wc = "../../west-coast/";
       L.section = "bentonville";
       L.eventRoot = "../";
     } else if (path.indexOf("/bentonville/") !== -1) {
       L.root = "../";
-      L.apply = "../apply.html";
-      L.upcoming = "../upcoming-conferences.html";
+      L.apply = "../apply";
+      L.upcoming = "../upcoming-conferences";
       L.bv = "";
       L.wc = "../west-coast/";
       L.section = "bentonville";
       L.eventRoot = "";
     } else if (path.indexOf("/west-coast/sessions/") !== -1 || path.indexOf("/west-coast/speakers/") !== -1) {
       L.root = "../../";
-      L.apply = "../../apply.html";
-      L.upcoming = "../../upcoming-conferences.html";
+      L.apply = "../../apply";
+      L.upcoming = "../../upcoming-conferences";
       L.bv = "../../bentonville/";
       L.wc = "../";
       L.section = "west-coast";
       L.eventRoot = "../";
     } else if (path.indexOf("/west-coast/") !== -1) {
       L.root = "../";
-      L.apply = "../apply.html";
-      L.upcoming = "../upcoming-conferences.html";
+      L.apply = "../apply";
+      L.upcoming = "../upcoming-conferences";
       L.bv = "../bentonville/";
       L.wc = "";
       L.section = "west-coast";
       L.eventRoot = "";
     } else {
       L.root = "";
-      L.apply = "apply.html";
-      L.upcoming = "upcoming-conferences.html";
+      L.apply = "apply";
+      L.upcoming = "upcoming-conferences";
       L.bv = "bentonville/";
       L.wc = "west-coast/";
       L.section = "series";
@@ -65,25 +65,47 @@
         : "";
   var applyHref = L.apply + (applyQuery ? applyQuery : "");
 
+  var homeHref = L.root || "./";
+
   var current = "";
-  if (path.indexOf("/bentonville/index.html") !== -1 || path.match(/\/bentonville\/?$/)) {
+  if (
+    path.match(/\/bentonville\/?$/) ||
+    path.match(/\/bentonville\/index\.html$/) ||
+    path.match(/\/bentonville\/index\/?$/)
+  ) {
     if (L.section === "bentonville") current = "bv-overview";
   }
-  if (path.indexOf("/west-coast/index.html") !== -1 || path.match(/\/west-coast\/?$/)) {
+  if (
+    path.match(/\/west-coast\/?$/) ||
+    path.match(/\/west-coast\/index\.html$/) ||
+    path.match(/\/west-coast\/index\/?$/)
+  ) {
     if (L.section === "west-coast") current = "wc-overview";
   }
   if (
-    (path.endsWith("index.html") || path.endsWith("/") || path.match(/discover-2026\/?$/) || path.match(/datalink-discover-2026\/?$/)) &&
-    L.section === "series"
+    (path.endsWith("index.html") ||
+      path.match(/\/index\.html$/) ||
+      path === "/" ||
+      path === "" ||
+      path.endsWith("/") ||
+      path.match(/discover-2026\/?$/) ||
+      path.match(/datalink-discover-2026\/?$/)) &&
+    L.section === "series" &&
+    path.indexOf("bentonville") === -1 &&
+    path.indexOf("west-coast") === -1
   ) {
     current = "home";
   }
-  if (path.indexOf("upcoming-conferences.html") !== -1) current = "conferences";
-  if (path.indexOf("apply.html") !== -1) current = "apply";
-  if (L.section === "bentonville" && path.indexOf("venue.html") !== -1) current = "bv-venue";
-  if (L.section === "bentonville" && path.indexOf("schedule.html") !== -1) current = "bv-schedule";
-  if (L.section === "west-coast" && path.indexOf("venue.html") !== -1) current = "wc-venue";
-  if (L.section === "west-coast" && path.indexOf("schedule.html") !== -1) current = "wc-schedule";
+  if (path.indexOf("upcoming-conferences.html") !== -1 || path.match(/\/upcoming-conferences\/?$/)) current = "conferences";
+  if (path.indexOf("apply.html") !== -1 || path.match(/\/apply\/?$/)) current = "apply";
+  if (L.section === "bentonville" && (path.indexOf("venue.html") !== -1 || path.match(/\/bentonville\/venue\/?$/)))
+    current = "bv-venue";
+  if (L.section === "bentonville" && (path.indexOf("schedule.html") !== -1 || path.match(/\/bentonville\/schedule\/?$/)))
+    current = "bv-schedule";
+  if (L.section === "west-coast" && (path.indexOf("venue.html") !== -1 || path.match(/\/west-coast\/venue\/?$/)))
+    current = "wc-venue";
+  if (L.section === "west-coast" && (path.indexOf("schedule.html") !== -1 || path.match(/\/west-coast\/schedule\/?$/)))
+    current = "wc-schedule";
   if (path.indexOf("/bentonville/speakers/") !== -1) current = "bv-speakers";
   if (path.indexOf("/west-coast/speakers/") !== -1) current = "wc-speakers";
 
@@ -93,28 +115,31 @@
 
   var logoSrc = L.root + "img/datalink-logo-text-white.png";
 
+  var bvHome = L.bv || "./";
+  var wcHome = L.wc || "./";
+
   var dropdownBv =
     '<div class="nav-dropdown">' +
     '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-bv">Bentonville</button>' +
     '<div id="nav-dd-bv" class="nav-dropdown__panel" role="menu">' +
     '<a role="menuitem" href="' +
-    L.bv +
-    'index.html"' +
+    bvHome +
+    '"' +
     aria("bv-overview") +
     ">Event overview</a>" +
     '<a role="menuitem" href="' +
     L.bv +
-    'schedule.html"' +
+    'schedule"' +
     aria("bv-schedule") +
     ">Schedule</a>" +
     '<a role="menuitem" href="' +
     L.bv +
-    'venue.html"' +
+    'venue"' +
     aria("bv-venue") +
     ">Venue &amp; travel</a>" +
     '<a role="menuitem" href="' +
     L.bv +
-    'speakers/index.html"' +
+    'speakers/"' +
     aria("bv-speakers") +
     ">Speakers</a>" +
     '<a role="menuitem" class="nav-dropdown__cta" href="' +
@@ -127,23 +152,23 @@
     '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-wc">Mandalay Beach</button>' +
     '<div id="nav-dd-wc" class="nav-dropdown__panel" role="menu">' +
     '<a role="menuitem" href="' +
-    L.wc +
-    'index.html"' +
+    wcHome +
+    '"' +
     aria("wc-overview") +
     ">Event overview</a>" +
     '<a role="menuitem" href="' +
     L.wc +
-    'schedule.html"' +
+    'schedule"' +
     aria("wc-schedule") +
     ">Schedule</a>" +
     '<a role="menuitem" href="' +
     L.wc +
-    'venue.html"' +
+    'venue"' +
     aria("wc-venue") +
     ">Venue &amp; travel</a>" +
     '<a role="menuitem" href="' +
     L.wc +
-    'speakers/index.html"' +
+    'speakers/"' +
     aria("wc-speakers") +
     ">Speakers</a>" +
     '<a role="menuitem" class="nav-dropdown__cta" href="' +
@@ -155,8 +180,8 @@
     '<header class="site-header">' +
     '<div class="wrap site-header__inner">' +
     '<a class="logo logo--mark" href="' +
-    L.root +
-    'index.html" aria-label="Datalink Discover — home">' +
+    homeHref +
+    '" aria-label="Datalink Discover — home">' +
     '<img src="' +
     logoSrc +
     '" alt="Datalink Networks" width="200" height="53" />' +
@@ -164,8 +189,8 @@
     '<button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>' +
     '<nav id="site-nav" class="nav-main" aria-label="Primary">' +
     '<a href="' +
-    L.root +
-    'index.html"' +
+    homeHref +
+    '"' +
     aria("home") +
     ">Series home</a>" +
     dropdownBv +
@@ -186,6 +211,7 @@
     if (L.section !== "bentonville" && L.section !== "west-coast") return "";
     var er = L.eventRoot;
     var isBv = L.section === "bentonville";
+    var erHome = er || "./";
     var label = isBv
       ? "Bentonville · June 17–19, 2026"
       : "Mandalay Beach · September 29–October 2, 2026 · Oxnard, CA";
@@ -199,23 +225,23 @@
       "</span>" +
       '<div class="event-subnav__links">' +
       '<a href="' +
-      er +
-      'index.html"' +
+      erHome +
+      '"' +
       aria(isBv ? "bv-overview" : "wc-overview") +
       ">Overview</a>" +
       '<a href="' +
       er +
-      'schedule.html"' +
+      'schedule"' +
       aria(isBv ? "bv-schedule" : "wc-schedule") +
       ">Schedule</a>" +
       '<a href="' +
       er +
-      'venue.html"' +
+      'venue"' +
       aria(isBv ? "bv-venue" : "wc-venue") +
       ">Venue</a>" +
       '<a href="' +
       er +
-      'speakers/index.html"' +
+      'speakers/"' +
       aria(isBv ? "bv-speakers" : "wc-speakers") +
       ">Speakers</a>" +
       "</div></div></nav>"
@@ -232,8 +258,8 @@
     "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore@datalinknetworks.com\">learnmore@datalinknetworks.com</a></p><p><a href=\"" +
     L.upcoming +
     '">Upcoming conferences</a><br><a href="' +
-    L.root +
-    'index.html">Series home</a><br><a href="https://www.datalinknetworks.com" target="_blank" rel="noopener">Datalink Networks</a></p></div>' +
+    homeHref +
+    '">Series home</a><br><a href="https://www.datalinknetworks.com" target="_blank" rel="noopener">Datalink Networks</a></p></div>' +
     '</div><div class="wrap site-footer__legal">Invitation-only events. Benefits confirmed upon selection. © Datalink Networks.</div></footer>';
 
   function wireDropdowns() {

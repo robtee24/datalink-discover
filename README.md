@@ -2,4 +2,4 @@
 
 Static microsite for the Datalink Discover conference series (HTML, CSS, JS).
 
-Open `index.html` locally or serve the folder with any static file server (for example `python3 -m http.server 8080`).
+Internal links omit the `.html` extension. **Vercel:** `vercel.json` sets `cleanUrls` so `/bentonville/schedule` serves `bentonville/schedule.html`. **Apache:** use the included `.htaccess` rewrite. Plain `python3 -m http.server` does not rewrite extensionless URLs—use `vercel dev` / deploy, or open files with the full `.html` path for quick checks.
