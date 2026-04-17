@@ -1091,6 +1091,30 @@ p.venue-collage-credit {
   letter-spacing: 0.12em;
   color: var(--accent);
 }
+
+.event-subnav__badge--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  max-width: min(38rem, 100%);
+  font-weight: 600;
+}
+
+.event-subnav__badge-line {
+  display: block;
+}
+
+.event-subnav__badge-line--muted {
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
 .event-subnav__links {
   display: flex;
   flex-wrap: wrap;
@@ -1147,6 +1171,16 @@ p.venue-collage-credit {
   max-width: 44rem;
   margin: 0 0 0.5rem;
   line-height: 1.55;
+}
+
+.event-hero .event-hero__kicker {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin: -0.15rem 0 1rem;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  max-width: 44rem;
 }
 
 .section-tight {

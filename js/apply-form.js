@@ -23,7 +23,8 @@
 
   var EVENT_OPTIONS = {
     bentonville: "Discover — Bentonville · June 17–19, 2026",
-    "west-coast": "Discover — West Coast · September 9–11, 2026",
+    "west-coast":
+      "Discover — Mandalay Beach · September 29–October 2, 2026 · Oxnard, CA / Zachari Dunes on Mandalay Beach",
   };
 
   var form = document.getElementById("discover-apply-form");
