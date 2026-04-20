@@ -1025,7 +1025,8 @@ p.venue-collage-credit {
 .site-sticky-head .site-header {
   position: relative;
   top: auto;
-  z-index: auto;
+  /* Above .event-subnav so dropdown panels (absolute) are not covered by the subnav row */
+  z-index: 2;
   background: transparent;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: none;
@@ -1102,6 +1103,9 @@ p.venue-collage-credit {
   border-radius: 10px;
   box-shadow: var(--shadow);
 }
+.nav-dropdown.is-open {
+  z-index: 5;
+}
 .nav-dropdown.is-open .nav-dropdown__panel {
   display: block;
 }
@@ -1141,7 +1145,7 @@ p.venue-collage-credit {
 .event-subnav {
   position: relative;
   top: auto;
-  z-index: auto;
+  z-index: 1;
   border-top: none;
   background: rgba(0, 0, 0, 0.15);
   border-bottom: none;
