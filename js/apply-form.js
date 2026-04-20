@@ -11,19 +11,20 @@
    * 4. If your account uses EU data hosting, set HUBSPOT_FORMS_HOST to https://api-eu1.hsforms.com
    *    (see HubSpot community / docs for regional forms endpoints).
    *
-   * Form fields in HubSpot must use these internal names: firstname, lastname, company, jobtitle, email, phone,
-   * plus single-line text discover_event (selected events, semicolon-separated).
+   * Form fields in HubSpot must use these internal names: firstname, lastname, company, jobtitle, work_email, phone,
+   * plus discover_event (enumeration / checkbox values from HubSpot field settings).
    */
   var HUBSPOT_FORMS_HOST = "https://api.hsforms.com";
   // var HUBSPOT_FORMS_HOST = "https://api-eu1.hsforms.com"; // uncomment if your portal is EU-hosted
 
-  /** Replace with portalId + formId from the form’s Share → embed snippet (must be the same form). */
+  /** Portal = segment after /forms/ in editor URL; form GUID = UUID in path or _hsFormId on share preview links. */
   var HUBSPOT_PORTAL_ID = "486200";
-  var HUBSPOT_FORM_GUID = "8c9b18cc-546f-4a65-81aa-2ba8a8512e4f";
+  var HUBSPOT_FORM_GUID = "1367822b-5536-471b-9308-f10fbf2e35e3";
 
-  var EVENT_OPTIONS = {
-    bentonville: "Discover — Bentonville · June 17–19, 2026",
-    "west-coast": "Discover — Mandalay Beach · September 29–October 2, 2026 · Oxnard, CA (Zachari Dunes on Mandalay Beach)",
+  /** HubSpot internal values for discover_event options (from field settings in HubSpot). */
+  var EVENT_HUBSPOT_VALUES = {
+    bentonville: "8_zkT2mv1n-gr_EqISs0N",
+    "west-coast": "Yy4r1Tmx_W8tdHBa_USOt",
   };
 
   var form = document.getElementById("discover-apply-form");
@@ -47,12 +48,14 @@
     eventField.value = slugs.length ? slugs.join(",") : "";
   }
 
-  function humanLabelsForSlugs(slugs) {
+  /** Values HubSpot expects for discover_event (enumeration / multi-checkbox). */
+  function hubspotDiscoverEventValue(slugs) {
     return slugs
       .map(function (s) {
-        return EVENT_OPTIONS[s] || s;
+        return EVENT_HUBSPOT_VALUES[s] || "";
       })
-      .join("; ");
+      .filter(Boolean)
+      .join(";");
   }
 
   function applyUrlPreselection() {
@@ -126,7 +129,7 @@
     }
 
     var names = splitName(fullname);
-    var eventHuman = humanLabelsForSlugs(selected);
+    var discoverEventValue = hubspotDiscoverEventValue(selected);
 
     if (!HUBSPOT_PORTAL_ID || !HUBSPOT_FORM_GUID) {
       showStatus(
@@ -152,9 +155,9 @@
         { name: "lastname", value: names.last },
         { name: "company", value: company },
         { name: "jobtitle", value: jobtitle },
-        { name: "email", value: email },
+        { name: "work_email", value: email },
         { name: "phone", value: phone },
-        { name: "discover_event", value: eventHuman },
+        { name: "discover_event", value: discoverEventValue },
       ],
       context: {
         pageUri: window.location.href,
@@ -216,11 +219,11 @@
         }
         if (detail && detail.length < 280) {
           showStatus(
-            "We could not submit the form: " + detail + " If this persists, email learnmore.com or call (877) 487-3783.",
+            "We could not submit the form: " + detail + " If this persists, email learnmore@datalinknetworks.net or call (877) 487-3783.",
             true
           );
         } else {
-          showStatus("Something went wrong. Please email learnmore.com or call (877) 487-3783.", true);
+          showStatus("Something went wrong. Please email learnmore@datalinknetworks.net or call (877) 487-3783.", true);
         }
       });
   });
