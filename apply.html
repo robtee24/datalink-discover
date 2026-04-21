@@ -18,6 +18,10 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/main.css" />
+    <!-- HubSpot tracking loads here (not only after footer site.js) so hubspotutk is set sooner for apply-form context.hutk / contact linking. Same id as site.js — duplicate injection is skipped. -->
+    <link rel="dns-prefetch" href="https://js.hs-scripts.com" />
+    <link rel="preconnect" href="https://js.hs-scripts.com" crossorigin />
+    <script type="text/javascript" async defer src="https://js.hs-scripts.com/486200.js" id="hs-script-loader"></script>
   </head>
   <body>
     <div id="site-header"></div>

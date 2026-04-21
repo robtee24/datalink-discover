@@ -20,6 +20,13 @@
    *
    * Context: `hutk` (hubspotutk cookie), `pageUri`, `pageName`, optional `ipAddress`. Do not add extra context keys
    * (e.g. userAgent) unless documented — they can make the whole request invalid on the public submit endpoint.
+   *
+   * If HubSpot shows the submission but “no contact” / cookie warnings: (1) Confirm `hubspotutk` exists before submit
+   * (DevTools → Application → Cookies; Network → request body has context.hutk). (2) Allowlist the site domain under
+   * Settings → Tracking Code → Advanced / Domains. (3) Check Form submissions → Spam. (4) Form must include every
+   * submitted field internal name (since 2022, extra CRM fields return FIELD_NOT_IN_FORM_DEFINITION / 400). (5) If the
+   * form requires GDPR/legal consent, the API payload must include matching legalConsentOptions or HubSpot may not
+   * create/update the contact as expected.
    */
   var HUBSPOT_FORMS_HOST = "https://api.hsforms.com";
   // var HUBSPOT_FORMS_HOST = "https://api-eu1.hsforms.com"; // uncomment if your portal is EU-hosted
@@ -254,20 +261,24 @@
       field("discover_event", discoverEventValue),
     ];
 
-    waitForHubspotUtk(3500)
+    waitForHubspotUtk(5500)
       .then(function () {
         if (!getHubspotUtk() && typeof console !== "undefined" && console.warn) {
           console.warn(
-            "[Discover apply] hubspotutk still missing after wait — confirm js.hs-scripts.com loads (ad blockers, CSP) so HubSpot can link this submission to a contact."
+            "[Discover apply] hubspotutk still missing after wait — HubSpot often cannot link this submission to a contact. Allowlist the domain, disable ad blockers for this page, and confirm the tracking script loads (see apply.html head + js/site.js)."
           );
         }
         return fetchClientIp();
       })
       .then(function (clientIp) {
+        var ctx = buildFormContext(clientIp);
+        if (typeof console !== "undefined" && console.info) {
+          console.info("[Discover apply] HubSpot submit: context.hutk present = " + (ctx.hutk ? "yes" : "no"));
+        }
         return {
           submittedAt: String(Date.now()),
           fields: fields,
-          context: buildFormContext(clientIp),
+          context: ctx,
         };
       })
       .then(function (payload) {
@@ -297,6 +308,9 @@
           }
           if (typeof console !== "undefined" && console.info) {
             console.info("[Discover apply] HubSpot response:", data);
+            console.info(
+              "[Discover apply] If the submission shows no contact in HubSpot, open that submission and read the on-screen banner (missing cookie vs spam vs consent)."
+            );
           }
           return data;
         });
