@@ -11,13 +11,13 @@
    * 4. If your account uses EU data hosting, set HUBSPOT_FORMS_HOST to https://api-eu1.hsforms.com
    *    (see HubSpot community / docs for regional forms endpoints).
    *
-   * Form fields must match your HubSpot form field internal names. We send both `email` (HubSpot default contact email)
-   * and `work_email` with the same value so contacts/submissions populate whether the form maps Email or Work email.
+   * Form fields must match your HubSpot form field internal names (see form editor → field → internal name).
+   * Email is sent once as `HUBSPOT_EMAIL_FIELD_NAME` (default `email`). Duplicate or wrong names trigger “The request is not valid”.
    * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
    * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
    *
-   * Context: pass `hutk` from the hubspotutk cookie (set when HubSpot tracking is installed on this domain) so HubSpot
-   * can link submissions to contacts and analytics. We also pass `ipAddress` when a quick client-IP lookup succeeds.
+   * Context: `hutk` (hubspotutk cookie), `pageUri`, `pageName`, optional `ipAddress`. Do not add extra context keys
+   * (e.g. userAgent) unless documented — they can make the whole request invalid on the public submit endpoint.
    */
   var HUBSPOT_FORMS_HOST = "https://api.hsforms.com";
   // var HUBSPOT_FORMS_HOST = "https://api-eu1.hsforms.com"; // uncomment if your portal is EU-hosted
@@ -25,6 +25,9 @@
   /** Portal = segment after /forms/ in editor URL; form GUID = UUID in path or _hsFormId on share preview links. */
   var HUBSPOT_PORTAL_ID = "486200";
   var HUBSPOT_FORM_GUID = "1367822b-5536-471b-9308-f10fbf2e35e3";
+
+  /** Internal name of the email field on the HubSpot form — almost always `email`; use `work_email` only if the form field is set up that way. */
+  var HUBSPOT_EMAIL_FIELD_NAME = "email";
 
   /** HubSpot internal values for discover_event options (from field settings in HubSpot). */
   var EVENT_HUBSPOT_VALUES = {
@@ -139,10 +142,23 @@
     var utk = getHubspotUtk();
     if (utk) ctx.hutk = utk;
     if (clientIp) ctx.ipAddress = clientIp;
-    if (typeof navigator !== "undefined" && navigator.userAgent) {
-      ctx.userAgent = navigator.userAgent;
-    }
     return ctx;
+  }
+
+  /** Flatten HubSpot error payload for display (message alone is often generic). */
+  function hubspotErrorDetail(data) {
+    if (!data || typeof data !== "object") return "";
+    var parts = [];
+    if (data.message) parts.push(String(data.message));
+    if (data.errors && data.errors.length) {
+      data.errors.forEach(function (er) {
+        if (!er) return;
+        var bit = er.message || er.errorType || (typeof er === "string" ? er : "");
+        if (bit) parts.push(String(bit));
+      });
+    }
+    if (data.correlationId) parts.push("Reference: " + data.correlationId);
+    return parts.filter(Boolean).join(" — ");
   }
 
   form.addEventListener("submit", function (e) {
@@ -194,20 +210,18 @@
       "/" +
       encodeURIComponent(HUBSPOT_FORM_GUID);
 
-    var contact = "0-1";
-    function f(name, value) {
-      return { objectTypeId: contact, name: name, value: value };
+    function field(name, value) {
+      return { name: name, value: value };
     }
 
     var fields = [
-      f("firstname", firstname),
-      f("lastname", lastname),
-      f("company", company),
-      f("jobtitle", jobtitle),
-      f("email", email),
-      f("work_email", email),
-      f("phone", phone),
-      f("discover_event", discoverEventValue),
+      field("firstname", firstname),
+      field("lastname", lastname),
+      field("company", company),
+      field("jobtitle", jobtitle),
+      field(HUBSPOT_EMAIL_FIELD_NAME, email),
+      field("phone", phone),
+      field("discover_event", discoverEventValue),
     ];
 
     if (!getHubspotUtk() && typeof console !== "undefined" && console.warn) {
@@ -238,13 +252,7 @@
             data = text ? JSON.parse(text) : {};
           } catch (ignore) {}
           if (!res.ok) {
-            var msg =
-              data.message ||
-              (data.errors &&
-                data.errors[0] &&
-                (data.errors[0].message || data.errors[0].errorType)) ||
-              text ||
-              "HTTP " + res.status;
+            var msg = hubspotErrorDetail(data) || text || "HTTP " + res.status;
             var err = new Error(msg);
             err.hubspotBody = data;
             throw err;
@@ -287,7 +295,7 @@
           );
           return;
         }
-        if (detail && detail.length < 280) {
+        if (detail && detail.length < 480) {
           showStatus(
             "We could not submit the form: " + detail + " If this persists, email learnmore@datalinknetworks.net or call (877) 487-3783.",
             true
