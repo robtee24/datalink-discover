@@ -88,14 +88,6 @@
     cb.addEventListener("change", syncHiddenEventField);
   });
 
-  function splitName(full) {
-    var t = (full || "").trim();
-    if (!t) return { first: "", last: "" };
-    var i = t.indexOf(" ");
-    if (i === -1) return { first: t, last: "." };
-    return { first: t.slice(0, i).trim(), last: t.slice(i + 1).trim() || "." };
-  }
-
   function showStatus(msg, isError) {
     if (!statusEl) return;
     statusEl.textContent = msg;
@@ -119,18 +111,18 @@
       return;
     }
 
-    var fullname = document.getElementById("field-fullname").value.trim();
+    var firstname = document.getElementById("field-firstname").value.trim();
+    var lastname = document.getElementById("field-lastname").value.trim();
     var company = document.getElementById("field-company").value.trim();
     var jobtitle = document.getElementById("field-jobtitle").value.trim();
     var email = document.getElementById("field-email").value.trim();
     var phone = document.getElementById("field-phone").value.trim();
 
-    if (!fullname || !company || !jobtitle || !email || !phone) {
+    if (!firstname || !lastname || !company || !jobtitle || !email || !phone) {
       showStatus("Please complete all required fields.", true);
       return;
     }
 
-    var names = splitName(fullname);
     var discoverEventValue = hubspotDiscoverEventValue(selected);
 
     if (!HUBSPOT_PORTAL_ID || !HUBSPOT_FORM_GUID) {
@@ -157,8 +149,8 @@
     }
 
     var fields = [
-      f("firstname", names.first),
-      f("lastname", names.last),
+      f("firstname", firstname),
+      f("lastname", lastname),
       f("company", company),
       f("jobtitle", jobtitle),
       f("email", email),
