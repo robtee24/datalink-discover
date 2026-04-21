@@ -11,8 +11,10 @@
    * 4. If your account uses EU data hosting, set HUBSPOT_FORMS_HOST to https://api-eu1.hsforms.com
    *    (see HubSpot community / docs for regional forms endpoints).
    *
-   * Form fields in HubSpot must use these internal names: firstname, lastname, company, jobtitle, work_email, phone,
-   * plus discover_event (enumeration / checkbox values from HubSpot field settings).
+   * Form fields must match your HubSpot form field internal names. We send both `email` (HubSpot default contact email)
+   * and `work_email` with the same value so contacts/submissions populate whether the form maps Email or Work email.
+   * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
+   * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
    */
   var HUBSPOT_FORMS_HOST = "https://api.hsforms.com";
   // var HUBSPOT_FORMS_HOST = "https://api-eu1.hsforms.com"; // uncomment if your portal is EU-hosted
@@ -149,16 +151,25 @@
       "/" +
       encodeURIComponent(HUBSPOT_FORM_GUID);
 
+    var contact = "0-1";
+    function f(name, value) {
+      return { objectTypeId: contact, name: name, value: value };
+    }
+
+    var fields = [
+      f("firstname", names.first),
+      f("lastname", names.last),
+      f("company", company),
+      f("jobtitle", jobtitle),
+      f("email", email),
+      f("work_email", email),
+      f("phone", phone),
+      f("discover_event", discoverEventValue),
+    ];
+
     var payload = {
-      fields: [
-        { name: "firstname", value: names.first },
-        { name: "lastname", value: names.last },
-        { name: "company", value: company },
-        { name: "jobtitle", value: jobtitle },
-        { name: "work_email", value: email },
-        { name: "phone", value: phone },
-        { name: "discover_event", value: discoverEventValue },
-      ],
+      submittedAt: String(Date.now()),
+      fields: fields,
       context: {
         pageUri: window.location.href,
         pageName: document.title,
@@ -187,6 +198,15 @@
             var err = new Error(msg);
             err.hubspotBody = data;
             throw err;
+          }
+          var st = data && (data.status || data.state);
+          if (st && String(st).toLowerCase() === "error") {
+            var err2 = new Error(data.message || "HubSpot returned an error status in the response body.");
+            err2.hubspotBody = data;
+            throw err2;
+          }
+          if (typeof console !== "undefined" && console.info) {
+            console.info("[Discover apply] HubSpot response:", data);
           }
           return data;
         });
