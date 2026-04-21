@@ -15,6 +15,9 @@
    * and `work_email` with the same value so contacts/submissions populate whether the form maps Email or Work email.
    * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
    * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
+   *
+   * Context: pass `hutk` from the hubspotutk cookie (set when HubSpot tracking is installed on this domain) so HubSpot
+   * can link submissions to contacts and analytics. We also pass `ipAddress` when a quick client-IP lookup succeeds.
    */
   var HUBSPOT_FORMS_HOST = "https://api.hsforms.com";
   // var HUBSPOT_FORMS_HOST = "https://api-eu1.hsforms.com"; // uncomment if your portal is EU-hosted
@@ -94,6 +97,54 @@
     statusEl.classList.toggle("is-error", !!isError);
   }
 
+  /** Value of HubSpot’s visitor cookie (required for linking API submissions to contacts / sessions). */
+  function getHubspotUtk() {
+    try {
+      var m = document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]*)/);
+      if (!m || !m[1]) return "";
+      return decodeURIComponent(m[1].replace(/^"+|"+$/g, "").trim());
+    } catch (e) {
+      return "";
+    }
+  }
+
+  /** Best-effort public IP for HubSpot context (avoids “no IP” warnings on API submissions). */
+  function fetchClientIp() {
+    var ctrl = new AbortController();
+    var t = setTimeout(function () {
+      ctrl.abort();
+    }, 2500);
+    function done() {
+      clearTimeout(t);
+    }
+    return fetch("https://api.ipify.org?format=json", { signal: ctrl.signal, credentials: "omit" })
+      .then(function (r) {
+        if (!r.ok) return "";
+        return r.json();
+      })
+      .then(function (j) {
+        return j && j.ip ? String(j.ip).trim() : "";
+      })
+      .catch(function () {
+        return "";
+      })
+      .finally(done);
+  }
+
+  function buildFormContext(clientIp) {
+    var ctx = {
+      pageUri: window.location.href,
+      pageName: document.title,
+    };
+    var utk = getHubspotUtk();
+    if (utk) ctx.hutk = utk;
+    if (clientIp) ctx.ipAddress = clientIp;
+    if (typeof navigator !== "undefined" && navigator.userAgent) {
+      ctx.userAgent = navigator.userAgent;
+    }
+    return ctx;
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     showStatus("");
@@ -159,20 +210,27 @@
       f("discover_event", discoverEventValue),
     ];
 
-    var payload = {
-      submittedAt: String(Date.now()),
-      fields: fields,
-      context: {
-        pageUri: window.location.href,
-        pageName: document.title,
-      },
-    };
+    if (!getHubspotUtk() && typeof console !== "undefined" && console.warn) {
+      console.warn(
+        "[Discover apply] No hubspotutk cookie yet. Add HubSpot’s tracking code to this site (same domain) so form submissions link to contacts and sessions."
+      );
+    }
 
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
+    fetchClientIp()
+      .then(function (clientIp) {
+        return {
+          submittedAt: String(Date.now()),
+          fields: fields,
+          context: buildFormContext(clientIp),
+        };
+      })
+      .then(function (payload) {
+        return fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      })
       .then(function (res) {
         return res.text().then(function (text) {
           var data = {};

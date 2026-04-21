@@ -61,7 +61,7 @@
         </ul>
         <p class="apply-note text-muted">
           Submissions use HubSpot’s public Forms submit URL (see <code>js/apply-form.js</code>). The <strong>portal ID</strong> and <strong>form ID</strong> must match the same form: in HubSpot open <strong>Marketing → Lead capture → Forms</strong>, choose the apply form, click <strong>Share</strong>, and copy <code>portalId</code> and <code>formId</code> from the embed code into that file. If HubSpot says the form was not found, those values are wrong or your account needs the EU endpoint (<code>HUBSPOT_FORMS_HOST</code> in the script). Field internal names:
-          <code>firstname</code>, <code>lastname</code>, <code>company</code>, <code>jobtitle</code>, <code>email</code> + <code>work_email</code> (same value; matches HubSpot contact + your form), <code>phone</code>, <code>discover_event</code>. Each field is sent with <code>objectTypeId</code> <code>0-1</code> (contact).
+          <code>firstname</code>, <code>lastname</code>, <code>company</code>, <code>jobtitle</code>, <code>email</code> + <code>work_email</code> (same value; matches HubSpot contact + your form), <code>phone</code>, <code>discover_event</code>. Each field is sent with <code>objectTypeId</code> <code>0-1</code> (contact). For CRM linking and analytics, install <strong>HubSpot’s tracking code</strong> on this domain (Settings → Tracking code → copy embed) so visitors get the <code>hubspotutk</code> cookie; the apply script sends it as <code>context.hutk</code> with each submission.
           <a href="mailto:learnmore@datalinknetworks.net">learnmore@datalinknetworks.net</a>.
         </p>
       </div>
