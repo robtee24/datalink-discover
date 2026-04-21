@@ -142,6 +142,20 @@
     return ctx;
   }
 
+  /** Wait briefly for HubSpot’s script to set `hubspotutk` (injected from site.js). */
+  function waitForHubspotUtk(maxWaitMs) {
+    if (getHubspotUtk()) return Promise.resolve();
+    var start = Date.now();
+    return new Promise(function (resolve) {
+      var id = setInterval(function () {
+        if (getHubspotUtk() || Date.now() - start >= maxWaitMs) {
+          clearInterval(id);
+          resolve();
+        }
+      }, 80);
+    });
+  }
+
   /** Flatten HubSpot error payload for display (message alone is often generic). */
   function hubspotErrorDetail(data) {
     if (!data || typeof data !== "object") return "";
@@ -212,22 +226,24 @@
     }
 
     var fields = [
+      field("email", String(email)),
       field("firstname", firstname),
       field("lastname", lastname),
       field("company", company),
       field("jobtitle", jobtitle),
-      field("email", email),
       field("phone", phone),
       field("discover_event", discoverEventValue),
     ];
 
-    if (!getHubspotUtk() && typeof console !== "undefined" && console.warn) {
-      console.warn(
-        "[Discover apply] No hubspotutk cookie yet. Add HubSpot’s tracking code to this site (same domain) so form submissions link to contacts and sessions."
-      );
-    }
-
-    fetchClientIp()
+    waitForHubspotUtk(3500)
+      .then(function () {
+        if (!getHubspotUtk() && typeof console !== "undefined" && console.warn) {
+          console.warn(
+            "[Discover apply] hubspotutk still missing after wait — confirm js.hs-scripts.com loads (ad blockers, CSP) so HubSpot can link this submission to a contact."
+          );
+        }
+        return fetchClientIp();
+      })
       .then(function (clientIp) {
         return {
           submittedAt: String(Date.now()),

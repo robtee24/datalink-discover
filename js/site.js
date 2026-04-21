@@ -1,4 +1,18 @@
 (function () {
+  /** Same portal as HubSpot forms — loads tracking so `hubspotutk` exists for form API `context.hutk`. */
+  var HUBSPOT_TRACKING_PORTAL_ID = "486200";
+
+  function ensureHubspotTrackingScript() {
+    if (document.getElementById("hs-script-loader")) return;
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.id = "hs-script-loader";
+    s.async = true;
+    s.defer = true;
+    s.src = "https://js.hs-scripts.com/" + encodeURIComponent(HUBSPOT_TRACKING_PORTAL_ID) + ".js";
+    document.head.appendChild(s);
+  }
+
   var path = (window.location.pathname || "").replace(/\\/g, "/");
 
   function computeLayout() {
@@ -319,6 +333,7 @@
     requestAnimationFrame(syncChromeHeight);
     window.addEventListener("resize", syncChromeHeight);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncChromeHeight);
+    ensureHubspotTrackingScript();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", inject);
