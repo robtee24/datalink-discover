@@ -12,7 +12,7 @@
    *    (see HubSpot community / docs for regional forms endpoints).
    *
    * Form fields must match your HubSpot form field internal names (see form editor → field → internal name).
-   * Email is sent once as `HUBSPOT_EMAIL_FIELD_NAME` (default `email`). Duplicate or wrong names trigger “The request is not valid”.
+   * Email is sent as HubSpot field `email` only. Duplicate or wrong field names trigger “The request is not valid”.
    * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
    * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
    *
@@ -25,9 +25,6 @@
   /** Portal = segment after /forms/ in editor URL; form GUID = UUID in path or _hsFormId on share preview links. */
   var HUBSPOT_PORTAL_ID = "486200";
   var HUBSPOT_FORM_GUID = "1367822b-5536-471b-9308-f10fbf2e35e3";
-
-  /** Internal name of the email field on the HubSpot form — almost always `email`; use `work_email` only if the form field is set up that way. */
-  var HUBSPOT_EMAIL_FIELD_NAME = "email";
 
   /** HubSpot internal values for discover_event options (from field settings in HubSpot). */
   var EVENT_HUBSPOT_VALUES = {
@@ -219,7 +216,7 @@
       field("lastname", lastname),
       field("company", company),
       field("jobtitle", jobtitle),
-      field(HUBSPOT_EMAIL_FIELD_NAME, email),
+      field("email", email),
       field("phone", phone),
       field("discover_event", discoverEventValue),
     ];
