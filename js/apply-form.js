@@ -12,8 +12,9 @@
    *    (see HubSpot community / docs for regional forms endpoints).
    *
    * Form fields must match your HubSpot form field internal names (see form editor → field → internal name).
-   * Email must use the form field’s internal name (`work_email` here). Sending `email` when the form only has `work_email`
-   * drops the value and HubSpot may show no contact / missing cookie linkage.
+   * We send `work_email` (form-connected property) and `email` (same value) so HubSpot can map the custom field and
+   * deduplicate/update contacts on the standard email property. Add a hidden `email` field on the HubSpot form if the
+   * API rejects unknown field names.
    * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
    * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
    *
@@ -35,6 +36,9 @@
 
   var form = document.getElementById("discover-apply-form");
   var statusEl = document.getElementById("apply-form-status");
+  var formPanel = document.getElementById("apply-form-panel");
+  var successPanel = document.getElementById("apply-success-panel");
+  var cardHeading = document.getElementById("apply-card-heading");
   var eventField = document.getElementById("field-event");
 
   if (!form) return;
@@ -94,8 +98,24 @@
 
   function showStatus(msg, isError) {
     if (!statusEl) return;
+    statusEl.removeAttribute("hidden");
     statusEl.textContent = msg;
     statusEl.classList.toggle("is-error", !!isError);
+  }
+
+  /** Replaces the form block with the thank-you message. Form returns on full page load (session persistence later). */
+  function showApplySuccess() {
+    showStatus("", false);
+    if (statusEl) statusEl.setAttribute("hidden", "");
+    if (cardHeading) cardHeading.setAttribute("hidden", "");
+    if (formPanel) formPanel.setAttribute("hidden", "");
+    if (successPanel) {
+      successPanel.removeAttribute("hidden");
+      try {
+        successPanel.focus();
+        successPanel.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      } catch (ignore) {}
+    }
   }
 
   /** Value of HubSpot’s visitor cookie (required for linking API submissions to contacts / sessions). */
@@ -178,7 +198,7 @@
     showStatus("");
 
     if (form.website && form.website.value) {
-      showStatus("Thanks — we will be in touch.", false);
+      showApplySuccess();
       return;
     }
 
@@ -205,12 +225,9 @@
     var discoverEventValue = hubspotDiscoverEventValue(selected);
 
     if (!HUBSPOT_PORTAL_ID || !HUBSPOT_FORM_GUID) {
-      showStatus(
-        "Thank you — your details are captured for this preview. Connect HubSpot in js/apply-form.js (portal ID + form GUID) to sync submissions automatically.",
-        false
-      );
       form.reset();
       applyUrlPreselection();
+      showApplySuccess();
       return;
     }
 
@@ -228,6 +245,7 @@
 
     var fields = [
       field("work_email", String(email)),
+      field("email", String(email)),
       field("firstname", firstname),
       field("lastname", lastname),
       field("company", company),
@@ -284,9 +302,9 @@
         });
       })
       .then(function () {
-        showStatus("Thank you. Our team will review your application and follow up by email.", false);
         form.reset();
         applyUrlPreselection();
+        showApplySuccess();
       })
       .catch(function (err) {
         if (typeof console !== "undefined" && console.error) {
