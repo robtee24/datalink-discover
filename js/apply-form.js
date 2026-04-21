@@ -12,9 +12,10 @@
    *    (see HubSpot community / docs for regional forms endpoints).
    *
    * Form fields must match your HubSpot form field internal names (see form editor → field → internal name).
-   * We send `work_email` (form-connected property) and `email` (same value) so HubSpot can map the custom field and
-   * deduplicate/update contacts on the standard email property. Add a hidden `email` field on the HubSpot form if the
-   * API rejects unknown field names.
+   * HubSpot creates/updates the contact from the standard Email property (`email`). If the form only has `work_email`,
+   * submissions show “No contact record” / “No email was entered” even when work_email has a value — extra JSON keys
+   * are not applied unless that field exists on the form. Add a real form field (hidden is fine) mapped to Contact →
+   * Email, internal name `email`, then publish. We send both `email` and `work_email` with the same address.
    * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
    * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
    *
@@ -251,8 +252,8 @@
     }
 
     var fields = [
-      field("work_email", String(email)),
       field("email", String(email)),
+      field("work_email", String(email)),
       field("firstname", firstname),
       field("lastname", lastname),
       field("company", company),
