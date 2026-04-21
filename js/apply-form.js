@@ -12,7 +12,8 @@
    *    (see HubSpot community / docs for regional forms endpoints).
    *
    * Form fields must match your HubSpot form field internal names (see form editor → field → internal name).
-   * Email is sent as HubSpot field `email` only. Duplicate or wrong field names trigger “The request is not valid”.
+   * Email must use the form field’s internal name (`work_email` here). Sending `email` when the form only has `work_email`
+   * drops the value and HubSpot may show no contact / missing cookie linkage.
    * If submissions still appear empty in HubSpot: turn off reCAPTCHA on the form (API cannot solve it), publish the form,
    * and confirm each field’s internal name under the field’s “Advanced” / property mapping in the form editor.
    *
@@ -226,7 +227,7 @@
     }
 
     var fields = [
-      field("email", String(email)),
+      field("work_email", String(email)),
       field("firstname", firstname),
       field("lastname", lastname),
       field("company", company),
