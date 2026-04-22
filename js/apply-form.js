@@ -36,73 +36,16 @@
   var HUBSPOT_PORTAL_ID = "486200";
   var HUBSPOT_FORM_GUID = "1367822b-5536-471b-9308-f10fbf2e35e3";
 
-  /** HubSpot internal values for discover_event options (from field settings in HubSpot). */
-  var EVENT_HUBSPOT_VALUES = {
-    bentonville: "8_zkT2mv1n-gr_EqISs0N",
-    "west-coast": "Yy4r1Tmx_W8tdHBa_USOt",
-  };
+  /** HubSpot internal value for discover_event — Bentonville (from field settings in HubSpot). */
+  var DISCOVER_EVENT_BENTONVILLE = "8_zkT2mv1n-gr_EqISs0N";
 
   var form = document.getElementById("discover-apply-form");
   var statusEl = document.getElementById("apply-form-status");
   var formPanel = document.getElementById("apply-form-panel");
   var successPanel = document.getElementById("apply-success-panel");
   var cardHeading = document.getElementById("apply-card-heading");
-  var eventField = document.getElementById("field-event");
 
   if (!form) return;
-
-  var checkboxes = form.querySelectorAll('input[name="apply_event"][type="checkbox"]');
-
-  function getSelectedSlugs() {
-    var out = [];
-    checkboxes.forEach(function (cb) {
-      if (cb.checked) out.push(cb.value);
-    });
-    return out;
-  }
-
-  function syncHiddenEventField() {
-    var slugs = getSelectedSlugs();
-    eventField.value = slugs.length ? slugs.join(",") : "";
-  }
-
-  /** Values HubSpot expects for discover_event (enumeration / multi-checkbox). */
-  function hubspotDiscoverEventValue(slugs) {
-    return slugs
-      .map(function (s) {
-        return EVENT_HUBSPOT_VALUES[s] || "";
-      })
-      .filter(Boolean)
-      .join(";");
-  }
-
-  function applyUrlPreselection() {
-    var params = new URLSearchParams(window.location.search);
-    var fromUrl = params.getAll("event").map(function (s) {
-      return String(s).toLowerCase().trim();
-    });
-    if (fromUrl.length === 0) {
-      checkboxes.forEach(function (cb) {
-        cb.checked = false;
-      });
-    } else {
-      checkboxes.forEach(function (cb) {
-        cb.checked = fromUrl.indexOf(cb.value) !== -1;
-      });
-      if (getSelectedSlugs().length === 0) {
-        checkboxes.forEach(function (cb) {
-          cb.checked = false;
-        });
-      }
-    }
-    syncHiddenEventField();
-  }
-
-  applyUrlPreselection();
-
-  checkboxes.forEach(function (cb) {
-    cb.addEventListener("change", syncHiddenEventField);
-  });
 
   function showStatus(msg, isError) {
     if (!statusEl) return;
@@ -210,14 +153,6 @@
       return;
     }
 
-    var selected = getSelectedSlugs();
-    syncHiddenEventField();
-
-    if (selected.length === 0) {
-      showStatus("Please select at least one event.", true);
-      return;
-    }
-
     var firstname = document.getElementById("field-firstname").value.trim();
     var lastname = document.getElementById("field-lastname").value.trim();
     var company = document.getElementById("field-company").value.trim();
@@ -230,11 +165,10 @@
       return;
     }
 
-    var discoverEventValue = hubspotDiscoverEventValue(selected);
+    var discoverEventValue = DISCOVER_EVENT_BENTONVILLE;
 
     if (!HUBSPOT_PORTAL_ID || !HUBSPOT_FORM_GUID) {
       form.reset();
-      applyUrlPreselection();
       showApplySuccess();
       return;
     }
@@ -318,7 +252,6 @@
       })
       .then(function () {
         form.reset();
-        applyUrlPreselection();
         showApplySuccess();
       })
       .catch(function (err) {

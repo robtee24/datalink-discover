@@ -70,21 +70,7 @@
         <div id="apply-form-status" class="apply-form-status" role="status" aria-live="polite"></div>
         <div id="apply-form-panel" class="apply-form-panel">
         <form id="discover-apply-form" class="apply-form" novalidate>
-          <input type="hidden" name="discover_event" id="field-event" value="" />
-          <fieldset class="apply-field apply-fieldset">
-            <legend class="apply-field__label">
-              Which event(s) would you like to apply for? <abbr title="required">*</abbr>
-            </legend>
-            <p class="apply-field-hint text-muted">Select all that apply.</p>
-            <label class="apply-checkbox">
-              <input type="checkbox" name="apply_event" value="bentonville" id="event-bentonville" />
-              <span>Discover — Bentonville · June 17–19, 2026</span>
-            </label>
-            <label class="apply-checkbox">
-              <input type="checkbox" name="apply_event" value="west-coast" id="event-west-coast" />
-              <span>Discover — Mandalay Beach · September 29–October 2, 2026 · Oxnard, CA (Zachari Dunes on Mandalay Beach)</span>
-            </label>
-          </fieldset>
+          <input type="hidden" name="discover_event" id="field-event" value="bentonville" />
           <label class="apply-field">
             <span class="apply-field__label">First name <abbr title="required">*</abbr></span>
             <input type="text" name="firstname" id="field-firstname" required autocomplete="given-name" />
