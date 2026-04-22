@@ -344,11 +344,11 @@
         }
         if (detail && detail.length < 480) {
           showStatus(
-            "We could not submit the form: " + detail + " If this persists, email learnmore@datalinknetworks.net or call (877) 487-3783.",
+            "We could not submit the form: " + detail + " If this persists, email arindt@datalinknetworks.net or call (877) 487-3783.",
             true
           );
         } else {
-          showStatus("Something went wrong. Please email learnmore@datalinknetworks.net or call (877) 487-3783.", true);
+          showStatus("Something went wrong. Please email arindt@datalinknetworks.net or call (877) 487-3783.", true);
         }
       });
   });

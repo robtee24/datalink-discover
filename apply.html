@@ -63,11 +63,6 @@
           <li><strong>Fit and cohort balance</strong> — we evaluate role, organization, and strategic relevance to the program.</li>
           <li><strong>Clear next steps</strong> — you will hear from us with approval details or an honest no / waitlist.</li>
         </ul>
-        <p class="apply-note text-muted">
-          Submissions use HubSpot’s public Forms submit URL (see <code>js/apply-form.js</code>). The <strong>portal ID</strong> and <strong>form ID</strong> must match the same form: in HubSpot open <strong>Marketing → Lead capture → Forms</strong>, choose the apply form, click <strong>Share</strong>, and copy <code>portalId</code> and <code>formId</code> from the embed code into that file. If HubSpot says the form was not found, those values are wrong or your account needs the EU endpoint (<code>HUBSPOT_FORMS_HOST</code> in the script). Field internal names:
-          Internal names must exist on the HubSpot form: <code>firstname</code>, <code>lastname</code>, <code>company</code>, <code>jobtitle</code>, <code>phone</code>, <code>discover_event</code>, <code>work_email</code>. <strong>Required for contact creation:</strong> add a separate field mapped to standard Contact <strong>Email</strong> (internal name <code>email</code>) — e.g. hidden — or HubSpot shows “No contact record” even when work email is filled. The script sends the same address to <code>email</code> and <code>work_email</code>. <strong>HubSpot tracking</strong> is loaded from <code>js/site.js</code> (<code>js.hs-scripts.com</code>) so the <code>hubspotutk</code> cookie can be sent as <code>context.hutk</code> — allow that script domain in CSP and disable ad blockers for testing if submissions show “no contact” / missing cookie warnings.
-          <a href="mailto:learnmore@datalinknetworks.net">learnmore@datalinknetworks.net</a>.
-        </p>
       </div>
 
       <div class="apply-card">

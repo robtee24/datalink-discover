@@ -269,7 +269,7 @@
     "<div><h3>Apply</h3><p>By approval only. Qualifying leaders may receive all expenses paid (travel, lodging, meals, and conference costs). Other approved guests receive complimentary conference access.</p><p><a href=\"" +
     applyHref +
     '">Apply for All Expenses Paid Access →</a></p></div>' +
-    "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:learnmore@datalinknetworks.net\">learnmore@datalinknetworks.net</a></p><p><a href=\"" +
+    "<div><h3>Contact</h3><p>Phone: <a href=\"tel:8774873783\">(877) 487-3783</a><br>Email: <a href=\"mailto:arindt@datalinknetworks.net\">arindt@datalinknetworks.net</a></p><p><a href=\"" +
     L.upcoming +
     '">Upcoming conferences</a><br><a href="' +
     homeHref +
