@@ -22,7 +22,7 @@
       upcoming: "upcoming-conferences",
       css: "css/main.css",
       bv: "bentonville/",
-      wc: "west-coast/",
+     // wc: "west-coast/",
       section: "series",
       eventRoot: "",
     };
@@ -31,7 +31,7 @@
       L.apply = "../../apply";
       L.upcoming = "../../upcoming-conferences";
       L.bv = "../";
-      L.wc = "../../west-coast/";
+      //L.wc = "../../west-coast/";
       L.section = "bentonville";
       L.eventRoot = "../";
     } else if (path.indexOf("/bentonville/") !== -1) {
@@ -39,7 +39,7 @@
       L.apply = "../apply";
       L.upcoming = "../upcoming-conferences";
       L.bv = "";
-      L.wc = "../west-coast/";
+      //L.wc = "../west-coast/";
       L.section = "bentonville";
       L.eventRoot = "";
     } else if (path.indexOf("/west-coast/sessions/") !== -1 || path.indexOf("/west-coast/speakers/") !== -1) {
@@ -48,22 +48,22 @@
       L.upcoming = "../../upcoming-conferences";
       L.bv = "../../bentonville/";
       L.wc = "../";
-      L.section = "west-coast";
+      //L.section = "west-coast";
       L.eventRoot = "../";
-    } else if (path.indexOf("/west-coast/") !== -1) {
+    } /* else if (path.indexOf("/west-coast/") !== -1) {
       L.root = "../";
       L.apply = "../apply";
       L.upcoming = "../upcoming-conferences";
       L.bv = "../bentonville/";
       L.wc = "";
       L.section = "west-coast";
-      L.eventRoot = "";
-    } else {
+      L.eventRoot = ""; 
+    } */ else {
       L.root = "";
       L.apply = "apply";
       L.upcoming = "upcoming-conferences";
       L.bv = "bentonville/";
-      L.wc = "west-coast/";
+      //L.wc = "west-coast/";
       L.section = "series";
     }
     return L;
@@ -74,8 +74,8 @@
   var applyQuery =
     L.section === "bentonville"
       ? "?event=bentonville"
-      : L.section === "west-coast"
-        ? "?event=west-coast"
+      //: L.section === "west-coast"
+      //  ? "?event=west-coast"
         : "";
   var applyHref = L.apply + (applyQuery ? applyQuery : "");
 
@@ -89,13 +89,13 @@
   ) {
     if (L.section === "bentonville") current = "bv-overview";
   }
-  if (
+ /* if (
     path.match(/\/west-coast\/?$/) ||
     path.match(/\/west-coast\/index\.html$/) ||
     path.match(/\/west-coast\/index\/?$/)
   ) {
     if (L.section === "west-coast") current = "wc-overview";
-  }
+  }*/
   if (
     (path.endsWith("index.html") ||
       path.match(/\/index\.html$/) ||
@@ -105,8 +105,8 @@
       path.match(/discover-2026\/?$/) ||
       path.match(/datalink-discover-2026\/?$/)) &&
     L.section === "series" &&
-    path.indexOf("bentonville") === -1 &&
-    path.indexOf("west-coast") === -1
+    path.indexOf("bentonville") === -1 // &&
+    //path.indexOf("west-coast") === -1
   ) {
     current = "home";
   }
@@ -116,12 +116,12 @@
     current = "bv-venue";
   if (L.section === "bentonville" && (path.indexOf("schedule.html") !== -1 || path.match(/\/bentonville\/schedule\/?$/)))
     current = "bv-schedule";
-  if (L.section === "west-coast" && (path.indexOf("venue.html") !== -1 || path.match(/\/west-coast\/venue\/?$/)))
+  /*if (L.section === "west-coast" && (path.indexOf("venue.html") !== -1 || path.match(/\/west-coast\/venue\/?$/)))
     current = "wc-venue";
   if (L.section === "west-coast" && (path.indexOf("schedule.html") !== -1 || path.match(/\/west-coast\/schedule\/?$/)))
-    current = "wc-schedule";
+    current = "wc-schedule";*/
   if (path.indexOf("/bentonville/speakers/") !== -1) current = "bv-speakers";
-  if (path.indexOf("/west-coast/speakers/") !== -1) current = "wc-speakers";
+  //if (path.indexOf("/west-coast/speakers/") !== -1) current = "wc-speakers";
 
   function aria(id) {
     return current === id ? ' aria-current="page"' : "";
@@ -160,7 +160,7 @@
     L.apply +
     '?event=bentonville">Apply for All Expenses Paid Access</a>' +
     "</div></div>";
-
+/*
   var dropdownWc =
     '<div class="nav-dropdown">' +
     '<button type="button" class="nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dd-wc">Mandalay Beach</button>' +
@@ -189,7 +189,7 @@
     L.apply +
     '?event=west-coast">Apply for All Expenses Paid Access</a>' +
     "</div></div>";
-
+*/
   var header =
     '<header class="site-header">' +
     '<div class="wrap site-header__inner">' +
@@ -208,7 +208,7 @@
     aria("home") +
     ">Series home</a>" +
     dropdownBv +
-    dropdownWc +
+    //dropdownWc +
     '<a href="' +
     L.upcoming +
     '"' +
